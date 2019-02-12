@@ -1,0 +1,34 @@
+C#中，变量是值还是引用仅取决于其数据类型。
+
+C#的基本数据类型都以平台无关的方式来定义。C#的预定义类型并没有内置于语言中，而是内置于.NET Framework中。
+.NET使用通用类型系统（CTS）定义了可以在中间语言（IL）中使用的预定义数据类型，所有面向.NET的语言都最终被编译为IL，即编译为基于CTS类型的代码
+
+引用类型：基类为Objcet
+值类型：均隐式派生自System.ValueType：
+
+值类型：
+byte，short，int，long，float，double，decimal，char，bool 和 struct 统称为值类型。
+
+引用类型:
+
+数组（派生于System.Array）,类：class（派生于System.Object),委托：delegate（派生于System.Delegate）,object（System.Object的别名）,
+接口：interface（接口不是一个“东西”，所以不存在派生于何处的问题。Anders在《C# Programming Language》中说，接口只是表示一种约定[contract]）；
+字符串：string（System.String的别名）。
+
+可以看出：
+引用类型与值类型相同的是，结构体也可以实现接口；
+引用类型可以派生出新的类型，而值类型不能；
+引用类型可以包含null值，值类型不能（可空类型功能允许将 null 赋给值类型）；
+引用类型变量的赋值只复制对对象的引用，而不复制对象本身。而将一个值类型变量赋给另一个值类型变量时，将复制包含的值。
+
+对于最后一条，经常混淆的是string。我曾经在一本书的一个早期版本上看到String变量比string变量效率高；我还经常听说String是引用类型，string是值类型，等等。
+例如：
+string s1 = "Hello, ";
+string s2 = "world!";
+string s3 = s1 + s2;//s3 is "Hello, world!"
+这确实看起来像一个值类型的赋值。再如：
+string s1 = "a";
+string s2 = s1;
+s1 = "b";//s2 is still "a"
+改变s1的值对s2没有影响。这更使string看起来像值类型。实际上，这是运算符重载的结果，当s1被改变时，.NET在托管堆上为s1重新分配了内存。
+这样的目的，是为了将做为引用类型的string实现为通常语义下的字符串。
