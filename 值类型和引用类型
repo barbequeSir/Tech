@@ -32,3 +32,6 @@ string s2 = s1;
 s1 = "b";//s2 is still "a"
 改变s1的值对s2没有影响。这更使string看起来像值类型。实际上，这是运算符重载的结果，当s1被改变时，.NET在托管堆上为s1重新分配了内存。
 这样的目的，是为了将做为引用类型的string实现为通常语义下的字符串。
+
+详细内容
+https://www.cnblogs.com/bakuhert/articles/5878086.html
