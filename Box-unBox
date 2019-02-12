@@ -42,3 +42,36 @@ IL_000e: stloc.1 //将栈上的数据存储到索引为1的局部变量即value
 拆箱操作的执行过程和装箱操作过程正好相反，是将存储在堆上的引用类型值转换为值类型并给值类型变量。
 
 装箱操作和拆箱操作是要额外耗费cpu和内存资源的，所以在c# 2.0之后引入了泛型来减少装箱操作和拆箱操作消耗
+
+1.	使用非泛型集合时引发的装箱和拆箱操作 
+
+看下面的一段代码：
+var array = new ArrayList();
+array.Add(1);
+array.Add(2);
+ 
+foreach (int value in array)
+{
+Console.WriteLine(“value is {0}”,value);
+}
+代码声明了一个ArrayList对象，向ArrayList中添加两个数字1，2；然后使用foreach将ArrayList中的元素打印到控制台。
+
+在这个过程中会发生两次装箱操作和两次拆箱操作，在向ArrayList中添加int类型元素时会发生装箱，在使用foreach枚举ArrayList中的int类型元素时会发生拆箱操作，将object类型转换成int类型，在执行到Console.WriteLine时，还会执行两次的装箱操作；这一段代码执行了6次的装箱和拆箱操作；如果ArrayList的元素个数很多，执行装箱拆箱的操作会更多。
+
+可以通过使用ILSpy之类的工具查看IL代码的box，unbox指令查看装箱和拆箱的过程
+
+2.	使用泛型集合的情况
+
+请看如下代码：
+
+var list = new List<int>();
+list.Add(1);
+list.Add(2);
+ 
+foreach (int value in list)
+{
+Console.WriteLine("value is {0}", value);
+}
+代码和1中的代码的差别在于集合的类型使用了泛型的List，而非ArrayList；我们同样可以通过查看IL代码查看装箱拆箱的情况，上述代码只会在Console.WriteLine()方法时执行2次装箱操作，不需要拆箱操作。
+
+可以看出泛型可以避免装箱拆箱带来的不必要的性能消耗；当然泛型的好处不止于此，泛型还可以增加程序的可读性，使程序更容易被复用等等。
