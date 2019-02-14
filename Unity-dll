@@ -1,0 +1,48 @@
+.c
+=========
+#if _MSC_VER
+#define EXPORT_API __declspec(dllexport)
+#endif
+extern "C"
+{
+	const  EXPORT_API char*  PrintHello()
+	{
+		return "Hello bbq";
+	}
+
+	int EXPORT_API  PrintNumber()
+	{
+		return 55;
+	}
+
+	int EXPORT_API Add(int a, int b)
+	{
+		return a + b;
+	}
+}
+=========
+
+.cs
+===========
+public class Game : MonoBehaviour {
+
+    [DllImport("testDll")]
+    public static extern int PrintNumber();
+
+    [DllImport("testDll")]
+    public static extern IntPtr PrintHello();
+
+    [DllImport("testDll")]
+    public static extern int Add(int a,int b);
+
+    private LuaSvr l;
+    private LuaTable lt;
+    private LuaFunction lUpdate;
+	void Start () {
+        IntPtr s = PrintHello();
+        Debug.Log(Marshal.PtrToStringAnsi(s));
+        Debug.Log(PrintNumber());
+        Debug.Log(Add(1, 2));      
+	}
+}
+===========
