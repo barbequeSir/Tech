@@ -1,0 +1,121 @@
+▪ a01. struct Foo 在栈上，但 structFoo[] 分配在堆上 
+
+▪ a02. GetType() 会产生 GC Alloc(每个调用 20 Bytes)
+
+▪ a03. delegate 的创建时 (赋值 = 或以参数传递) 在堆上分配 (如将方法做为参数传入)
+
+"1.一方面是避免内存泄漏，另一方面是减少内存分配。
+
+  2.避免内存泄漏，需要细心的去进行黑盒白盒检查，一般都是设计上的不合理造成的。同时可以善用 Destroy() 方法，强制释放非托管内存。最好弄清楚 Unity 的资源管理机制，这方面网上教程很多，我就不做搬运工了。
+
+  3.减少内存分配，并不是说任何时候都不分配。在关卡进行时要将内存分配尽量减少，以降低 GC 的频率。可以用 Profiler 找出是所有分配了内存的地方，再根据经验判断是否要进行优化。我以前粗略的整理过一些会产生 GC 的操作，可供参考：
+
+  1）生成一个新的委托，例如将方法做为参数传入
+
+  2） 对 List 进行 foreach
+
+  3）用枚举做 Key 进行字典查找（可能是默认比较器 GetHashCode 时装箱引起的，提供自定义的比较器应该能解决）
+
+  4）访问 animation 等组件
+
+  5）获取 SkinedMeshRenderer.bones 或 Mesh.uvs 之类的属性
+
+  6）yield return0 （建议全部替换为 yield return null）
+
+  7）调用 GetComponentInChildren（建议自己实现一个无GC版本）"
+
+ 
+
+▪ a04. delegate 尽量使用 = 而不是 += (后者会导致 InvocationList 不断增长且会被调用多次)
+
+▪ a05. 在针对 GC Alloc 做优化时，对象数量 > 引用关系复杂度 > 对象尺寸
+
+"对 Boehm garbagecollector 而言，对象数量直接影响单次 GC 的时间开销每个对象 90 个时钟周期左右 (大量时间是 cache-missing 所致) 算下来每秒 15M 数目的对象，也就是每毫秒标记 15000 个左右 
+
+▪ a06. 当可以使用整数句柄来代替引用时，尽量使用整数句柄 (简化引用关系) 
+
+▪ a07. 优化内存布局：利用“数组对 GC 而言是单一对象”这一特性
+
+"如我们有 List，内含 100 个对象。其中，Foo 如下定义"
+class Foo
+{
+    int a;   
+    float b;  
+    bool c; 
+    string str;
+}
+此时内存中共有 101 个 GC 对象 (100 个 Foo + 1 个 List 内部数组) ，且为 2 级的引用关系假如我们把数据打散成为单独的数组，如下所示：
+int[] aArray;
+float[] bArray;
+bool[] cArray;
+string[] strArray;
+此时所有数据不变的情况下，对象数量 (对 GC 而言) 降低到了 4 个更进一步，我们把所有的 ValueType 聚合起来
+
+struct Foo_S
+{
+    int a;
+    float b;    
+    bool c;
+}
+数据结构就成了
+
+Foo_S[] fooArray;
+string[] strArray;
+
+
+此时所有数据不变的情况下，对象数量 (对 GC 而言) 降低到了 2 个"
+
+▪ a08. (a01推广) 单个 ValueType 直接在栈上分配，但 ValueType Array 总是分配在堆上
+
+▪ b01. 避免频繁调用会分配内存的 accessors (如 Mesh.vertices/normals/uvs、SkinedMeshRenderer.bones)
+
+▪ b02. 避免频繁调用 Int.ToString() 及其它类型的衍生
+
+▪ b03. 避免在 Update() 内使用 GameObject.Tag 和 GameObject.Name
+
+▪ b04. 避免在 Update() 内 GetComponent()
+
+▪ b05. 避免在 Update() 内 GetComponentInChildren()，可自己实现无 GC 版本
+
+▪ b06. 避免在 Update() 内访问 animation 组件
+
+▪ b07. 避免在 Update() 内 FindObjectsOfType()
+
+▪ b08. 避免在 Update() 里赋值给栈上的数组，会触发堆内的反复分配
+
+▪ b09. 避免频繁使用 Mathf.Max 等函数的数组版（多于两个参数都会调到数组版）
+
+▪ b10. (b09 拓展)：所有具有 params 修饰的函数都应避免频繁使用（以避免临时数组的分配）
+
+▪ c01. 在不需要时避免使用 GUILayout - OnGUI 时把 useGUILayout 关掉
+
+▪ c02. 避免使用 foreach （除非遍历数组，或直接用 VS 预编译好的 dll）(Unity 5.5 已修复此问题)
+
+▪ c03. 避免使用枚举或 struct 做 Key 进行字典查找 (除非使用定制的 comparer)
+
+"当 Key 为用户定义的 struct 而非内建的值类型时，Dictionary 的主要接口会产生 GC Alloc Add / ContainsKey / TryGetValue / "[ ]" 等接口都需要对传进来的 TKey 调用默认的 EqualityComparer 来判断是否相等见 .net 代码文件 dictionary.cs 的第 94 行：
+
+而 EqualityComparer 的内部调了私有的 CreateComparer() 来创建真实的 Comparer，见 EqualityComparer.cs：
+
+内建类型（int/float 等等）已经实现了良好的 Equality 判断，而用户定义的 struct 则没有。很可惜上面的代码是 .Net 4.6 的最新代码，有理由推断老版本 mono 在对用户定义的 struct 调用上面的 Add / ContainsKey / TryGetValue / "[ ]" 等接口时产生了内存分配。
+
+方案：只需要手动定义一下 Comparer 并实现 Equals() 和 GetHashCode() 即可"
+
+
+▪ c04. 避免使用字符串版本的 Invoke 和 StartCoroutine
+
+▪ c05. 避免在产品中调用 Debug.Log (生成堆栈字符串)
+
+▪ c06. 避免在产品中使用 Linq
+
+▪ c07. 在可能的情况下复用成员变量而不是不断分配新对象
+
+▪ c08. 初始化 List<> 时指定合理的 Capacity
+
+▪ c09. 使用 StringBuilder 而不是使用 “+” 或 String.Concat() 拼接字符串
+
+▪ c10. 在使用协程 yield 时尽量复用 WaitXXX 对象 (使用 Yielders.cs) 而不是每次分配
+
+▪ c11. 确保 struct 实现了 IEquatable
+
+▪ c12. 确保 struct 实现了 Equals() 和 GetHashCode()
