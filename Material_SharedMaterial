@@ -1,0 +1,7 @@
+  当使用Renderer.material的时候，每次调用都会生成一个新的material到内存中去，这在销毁物体的时候需要我们手动去销毁该material，否则会一直存在内存中。
+也可以在场景替换的时候使用Resources.UnloadUnusedAssets去统一释放内存。
+  当使用Renderer.sharedMaterial的时候并不会生成新的material，而是直接在原material上修改，并且修改后的设置就会被保存到项目工程中。
+一般不推荐使用这个去修改，当某个材质球只被一个gameobject使用的时候可以使用这个去修改，并且最好在修改之前把原属性设置保存，当使用
+完毕后立即恢复原设置，防止下次加载后的gameobject上还会残留之前的设置信息。
+  如果是主角这一类gameobject身上需要修改材质的属性或者shader属性比较多的时候，可以第一次使用material，这样可以动态的生成一个material实例，
+然后再使用sharedmaterial，动态的修改这个新生成的material，而且不会创建新的material。
