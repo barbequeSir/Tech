@@ -295,6 +295,7 @@
     <Compile Include="Assets\Scripts\AssetBundle\SharpZipLib\Zip\ZipNameTransform.cs" />
     <Compile Include="Assets\Scripts\AssetBundle\SharpZipLib\Zip\ZipOutputStream.cs" />
     <Compile Include="Assets\Scripts\AssetBundle\ZipHelper\ZipHelper.cs" />
+    <Compile Include="Assets\Scripts\test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Arts\Shader_allinone\AutoSwitchGate.shader" />
