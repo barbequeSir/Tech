@@ -45,7 +45,7 @@ public class BundleMaker : Editor
             AssetBundleBuild[] list = nr.ListAllAssets(rootPath, buildScene);
             //创建ab包
             BuildPipeline.BuildAssetBundles(outPath, list, BuildAssetBundleOptions.DeterministicAssetBundle | BuildAssetBundleOptions.ForceRebuildAssetBundle, buildTarget);
-            deleteAllManifestFile(outPath, outPath);
+            //deleteAllManifestFile(outPath, outPath);
         }
        GenerateInfoData(isMakeBundle,isIncludeBundle, outPath);
         
@@ -130,7 +130,7 @@ public class BundleMaker : Editor
                 string zipDoc = "";
                 if (Directory.Exists(zipdir))
                 {
-                    ZipHelper.Compress(zipdir, outpath + namePath);
+                    //ZipHelper.Compress(zipdir, outpath + namePath);
                     zipDoc += GetBundMainFestDoc(namePath, outpath, false);
                 }
                 doc += zipDoc;

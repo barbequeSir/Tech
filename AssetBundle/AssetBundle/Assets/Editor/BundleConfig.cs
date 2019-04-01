@@ -65,11 +65,11 @@ public class BundleConfig
     public static string localDownloadObbPath;
 
 #if UNITY_ANDROID
-    public static string developOutputPath = Application.dataPath + "/../_Developer/Android/BundleAssets/";
+    public static string developOutputPath = Application.dataPath + "/../../Http/WWWRoot/Android/BundleAssets/";
 #elif UNITY_IOS
-    public static string developOutputPath = Application.dataPath + "/../_Developer/IOS/BundleAssets/";
+    public static string developOutputPath = Application.dataPath + "/../../Http/WWWRoot/IOS/BundleAssets/";
 #else
-    public static string developOutputPath = Application.dataPath + "/../_Developer/Windows/BundleAssets/";
+    public static string developOutputPath = Application.dataPath + "/../../Http/WWWRoot/Window/BundleAssets/";
 #endif
     public static string appOutputPath = Application.streamingAssetsPath + "/BundleAssets/";
     public static string updateOutputPath = Application.dataPath + "/../Release/BundleAssets/";
@@ -93,9 +93,9 @@ public class BundleConfig
     
     public static string mainManifestFile = "BundleAssets";
 
-    public static string developOutputPath_Android = Application.dataPath + "/../_Developer/Android/BundleAssets/";
-    public static string developOutputPath_Ios = Application.dataPath + "/../_Developer/IOS/BundleAssets/";
-    public static string developOutputPath_Windows = Application.dataPath + "/../_Developer/Windows/BundleAssets/";
+    public static string developOutputPath_Android = Application.dataPath + "/../../Http/WWWRoot/Android/BundleAssets/";
+    public static string developOutputPath_Ios = Application.dataPath + "/../../Http/WWWRoot/IOS/BundleAssets/";
+    public static string developOutputPath_Windows = Application.dataPath + "/../../Http/WWWRoot/Window/BundleAssets/";
 
     public static string resourceVersionFileName = "versionfile.txt";
     public static string allResourceZipFileName = "BundleAssets";

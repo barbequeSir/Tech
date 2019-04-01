@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 
 public class Build :Editor {    
-    [MenuItem("Tools/AssetBundle/Android")]
+    [MenuItem("Tools/AssetBundle/Win64")]
     public static void Bundle_Android()
     {
         BundleMaker.BuildAssets(BundleConfig.assetsPathRoot, false, BundleConfig.developOutputPath, BuildTarget.StandaloneWindows64);
