@@ -1,0 +1,11 @@
+1 文件夹定义  All Single 
+2 打包
+3 version 文件 filename md5 size
+
+检查version 文件是否存在 
+	a 不存在  拷贝streamassets 到perssistasset  解压 进入游戏
+	b 存在  服务器下载versionNew 比较 下载更新文件 进入游戏
+
+BundleManager   dictianary<string,bundle> m_asset
+	a if(m_asset.exist(name) return asset
+	  else WWW www = new  WWW(url)
