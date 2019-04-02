@@ -126,11 +126,11 @@ public class BundleMaker : Editor
                 doc += GetBundMainFestDoc(BundleConfig.mainManifestFile, outpath, false);
 
                 string namePath = string.Format("{0}_{1}.zip", BundleConfig.allResourceZipFileName, System.DateTime.Now.ToString("yyyyMMddHHmmss")).ToLower();
-                string zipdir = outpath + "/";
+                string zipdir = outpath ;
                 string zipDoc = "";
                 if (Directory.Exists(zipdir))
                 {
-                    //ZipHelper.Compress(zipdir, outpath + namePath);
+                    ZipHelper.Compress(zipdir, outpath + namePath);
                     zipDoc += GetBundMainFestDoc(namePath, outpath, false);
                 }
                 doc += zipDoc;
