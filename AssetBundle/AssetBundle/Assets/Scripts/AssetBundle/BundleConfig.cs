@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using _3rd;
 
 public class BundlePathPair
 {
@@ -33,6 +34,21 @@ public class BundleConfig
     public static string allinone_suffix = "allinone";
     public static string onebyone_suffix = "onebyone";
     public static string MainFolderName = "Arts";
+
+#if UNITY_ANDROID
+    public static string StreamingAssetPath = Application.streamingAssetsPath + "/";
+#elif UNITY_IOS
+#else
+    public static string StreamingAssetPath = Application.streamingAssetsPath + "/";
+#endif
+
+#if UNITY_ANDROID
+    public static string PersistentDataPath = Application.persistentDataPath + "/";
+#elif UNITY_IOS
+#else
+    public static string PersistentDataPath = Application.persistentDataPath + "/";
+#endif
+
     public static string[] assetPrefab = new string[] 
     {
         //"/DefaultResources/NewAtlas"
@@ -60,43 +76,36 @@ public class BundleConfig
     };
 
     public static string prefabBundlePath = "/Prefabs/";
-    public static string localPathRoot = Application.persistentDataPath + "/BundleAssets/";
-    public static string localDownloadPathRoot = Application.persistentDataPath + "/temp/";
-    public static string localDownloadObbPath;
+    public static string localPathRoot = BundleConfig.PersistentDataPath;
+    public static string localDownloadPathRoot ="file:///" + Application.dataPath + "/../Developer/Window/BundleAssets/";
 
-#if UNITY_ANDROID
-    public static string developOutputPath = Application.dataPath + "/../../Http/WWWRoot/Android/BundleAssets/";
-#elif UNITY_IOS
-    public static string developOutputPath = Application.dataPath + "/../../Http/WWWRoot/IOS/BundleAssets/";
+#if UNITY_ANDROID    
+    public static string developOutputPath = Application.dataPath + "/../Developer/Android/BundleAssets/";
+#elif UNITY_IOS    
 #else
-    public static string developOutputPath = Application.dataPath + "/../../Http/WWWRoot/Window/BundleAssets/";
+    public static string developOutputPath = Application.dataPath + "/../Developer/Window/BundleAssets/";
 #endif
     public static string appOutputPath = Application.streamingAssetsPath + "/BundleAssets/";
-    public static string updateOutputPath = Application.dataPath + "/../Release/BundleAssets/";
 
     public static string apkPath
     {
         //  /data/app/com.zw.zombieworld.gp-1.apk
         get
         {
-#if UNITY_ANDROID && !UNITY_EDITOR
-        using (AndroidJavaClass jc = new AndroidJavaClass("com.Tole.lmchat.MainActivity"))
-        {
-            string apkassetsPath = jc.CallStatic<string>("getApkAssetsPath");
-            return "jar:file://" + apkassetsPath + "!/assets/BundleAssets/";
-        }
-#else 
-            return Application.streamingAssetsPath + "/BundleAssets/";
-#endif
+            EDebug.Log(BundleConfig.StreamingAssetPath);
+            return BundleConfig.StreamingAssetPath;
+//#if UNITY_ANDROID && !UNITY_EDITOR
+//            return "jar:file://" + apkassetsPath + "!/assets/BundleAssets/";
+        
+//#else 
+//            return Application.streamingAssetsPath + "/BundleAssets/";
+//#endif
         }
    }
     
     public static string mainManifestFile = "BundleAssets";
-
-    public static string developOutputPath_Android = Application.dataPath + "/../../Http/WWWRoot/Android/BundleAssets/";
-    public static string developOutputPath_Ios = Application.dataPath + "/../../Http/WWWRoot/IOS/BundleAssets/";
-    public static string developOutputPath_Windows = Application.dataPath + "/../../Http/WWWRoot/Window/BundleAssets/";
-
     public static string resourceVersionFileName = "versionfile.txt";
+    public static string resourceOldVersionFileName = "versionfile_old.txt";
     public static string allResourceZipFileName = "BundleAssets";
+    public static string AssetBundleManifest = "AssetBundleManifest";
 }
