@@ -35,16 +35,14 @@ public class BundleConfig
     public static string onebyone_suffix = "onebyone";
     public static string MainFolderName = "Arts";
 
-#if UNITY_ANDROID
+#if UNITY_ANDROID &&  !UNITY_EDITOR
     public static string StreamingAssetPath = Application.streamingAssetsPath + "/";
-#elif UNITY_IOS
 #else
     public static string StreamingAssetPath = Application.streamingAssetsPath + "/";
 #endif
 
-#if UNITY_ANDROID
+#if UNITY_ANDROID &&  !UNITY_EDITOR
     public static string PersistentDataPath = Application.persistentDataPath + "/";
-#elif UNITY_IOS
 #else
     public static string PersistentDataPath = Application.persistentDataPath + "/";
 #endif
@@ -67,6 +65,7 @@ public class BundleConfig
     public const string flagBundleName = "Image/Icon_Flag/icon_flag.png";
 
 
+
     public static string assetsPathRoot = Application.dataPath + "/"+ BundleConfig.MainFolderName+"/";
     public static string sceneAssetsPathRoot = Application.dataPath + "/Scenes/";
     public static BundlePathConfigPair[] tableAssetsPathRoot = new BundlePathConfigPair[] 
@@ -77,11 +76,15 @@ public class BundleConfig
 
     public static string prefabBundlePath = "/Prefabs/";
     public static string localPathRoot = BundleConfig.PersistentDataPath;
-    public static string localDownloadPathRoot ="file:///" + Application.dataPath + "/../Developer/Window/BundleAssets/";
+#if UNITY_ANDROID &&  !UNITY_EDITOR
+    public static string localDownloadPathRoot = "file:///" + "D:/SVN/Tech/AssetBundle/AssetBundle/Developer/Android/BundleAssets/";
+#else
+    public static string localDownloadPathRoot ="file:///" + "D:/SVN/Tech/AssetBundle/AssetBundle/Developer/Android/BundleAssets/";
+#endif
 
-#if UNITY_ANDROID    
+
+#if UNITY_ANDROID &&  !UNITY_EDITOR
     public static string developOutputPath = Application.dataPath + "/../Developer/Android/BundleAssets/";
-#elif UNITY_IOS    
 #else
     public static string developOutputPath = Application.dataPath + "/../Developer/Window/BundleAssets/";
 #endif
