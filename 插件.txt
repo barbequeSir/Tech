@@ -1,0 +1,10 @@
+SRDebugger:
+	SRDebugger is a tool to help you track down bugs while on the target device.
+	Access to the Unity Console in any build of your game allows you to diagnose problems without deploying a debug build tethered to the Unity Editor.
+	The options tab can help you tweak parameters and invoke methods, enabling fast iteration of gameplay features.
+TextMesh Pro：
+	TextMesh Pro是Unity中文字渲染的终极解决方案，原本是一个第三方插件，后被Unity收购后并入Unity，现在可以免费使用。
+	TextMeshPro最基础的用法就是使用它的Text组件来显示文本。有两种使用方法，一种是通过网格MeshRenderer渲染，一种是通过UI系统渲染。	
+	
+Mobile Touch Camera：
+	这是一款用于处理移动平台的相机与输入控制的Unity插件，非常适用于塔防类、策略类或冒险类游戏。支持像素级别的缩放，并且可以无缝切换缩小或放大，例如，先按下一只手指，再用另一只手指来控制放大或缩小。插件自带相机	移动与道具拾取功能，且提供俯视视角、横向卷轴及斜45度场景的Demo
