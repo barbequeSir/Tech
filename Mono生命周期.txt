@@ -1,0 +1,41 @@
+public class test : MonoBehaviour
+{
+    void Awake()		{   Debug.Log("awake");}   
+    void Start()		{   Debug.Log("start");}
+    void OnEnable()		{	Debug.Log("Enable");}
+    void FixedUpdate()	{ 	Debug.Log("FixedUpdate");}    
+    void Update()		{	Debug.Log("Update");}
+    void LateUpdate()	{	Debug.Log("LateUpdate");}
+    void OnDisable()	{	Debug.Log("disable");}
+    void OnDestroy()	{	Debug.Log("destroy");}
+}
+
+
+
+对象 第一次激活时   		隐藏时			再次激活	 		销毁
+		Awake				OnDisable		OnEnable
+		OnEnable			
+		Start
+		FixedUpdate							FixedUpdate
+		Update								Update
+		LateUpdate							LateUpdate
+		OnDisable												OnDisable
+		OnDestroy												OnDestroy
+		
+对象在Awake中调用 Destroy时 
+Awake()
+{
+	Debug.log("awake before destroy");
+	GameObject.Destroy(gameObject);
+	Debug.log("awake after destroy");
+}
+
+输出: 	awake before destroy
+		disable
+		awake after destroy
+		destroy
+		
+		
+update跟当前平台的帧数有关，而FixedUpdate是真实时间，所以处理物理逻辑的时候要把代码放在FixedUpdate而不是Update.
+Update是在每次渲染新的一帧的时候才会调用
+而FixedUpdate，是在固定的时间间隔执行，不受游戏帧率的影响，所以处理Rigidbody的时候最好用FixedUpdate。
