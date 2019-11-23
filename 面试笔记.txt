@@ -1,0 +1,76 @@
+Unity左手坐标系  OpenGL右手坐标系
+Unity 坐标变换
+Camera.main.ViewportToScreenPoint (Vector3.zero);
+Camera.main.ScreenToViewportPoint (Vector3.zero);
+
+Camera.main.WorldToViewportPoint (Vector3.zero);
+Camera.main.ViewportToWorldPoint (Vector3.zero);
+
+Camera.main.WorldToScreenPoint (Vector3.zero);
+Camera.main.ScreenToWorldPoint (Vector3.zero); 
+
+transform.TransformPoint (Vector3.zero);// Point Local to World
+transform.TransformDirection(Vector3.zero);//Direction Local to World
+transform.TransformVector(Vector3.zero); //Vector Local To World
+transform.InverseTransformPoint(Vector3.zero);//Point World To Local
+transform.InverseTransformDirection(Vector3.zero);//Direction World to Local
+transform.InverseTransformVector(Vector3.zero);//vector World to Local
+
+Enumerator 和 Enumerable
+Enumerator可以依次返回集合项的类对象,Enumerable是带有GetEnumerator方法的类型,它返回Enumerator
+Public Class ColorEnumerator:IEnumerator
+{
+	private String[] Colors;
+	private int Position = -1;
+
+	public object Current
+	{
+		get
+		{
+			if(Position == -1 || Position == Colors.Length) return 0;
+			return Colors[Position]
+		}
+	}
+	public bool MoveNext()
+	{
+		if (Position < Colors.Length-1)
+		{
+			Position ++;
+			return true;
+		}
+		return false;
+	}
+	public void Reset()
+	{
+		Position = -1;
+	}
+	public ColorEnumerator(string[] theColors)
+	{
+		Colors = new String[theColor.Length];
+		for(int i = 0;i< theColors.Length-1;i++)
+		{
+			Colors[i] = theColors[i];
+		}
+	}
+}
+ColorEnumerator ce = new ColorEnumerator(new string[]{"",""});
+while(ce.MoveNext())
+{
+	Debug.Log(ce.Current);
+}
+
+
+public ColorEnumerable:IEnumerable
+{
+	string[] MyColor = new string[]{"1","2"};
+	IEnumerator GetEnumerator()
+	{
+		return new ColorEnumerator(MyColor);
+	}
+}
+
+MyEnumerable me = new MyEnumerable();
+foreach(string i in me)
+{
+	Debug.log();
+}
